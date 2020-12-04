@@ -1,0 +1,78 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::middleware('auth')->group(function ()
+{
+	Route::get('/', 'HomeController@index')->name('home');
+	Route::view('/report', 'report')->name('report');
+
+	Route::patch('/change_password', 'UserController@updatePassword')->name('change_password');
+	Route::view('/change_password', 'change_password');
+
+	Route::post('/user/datatables', 'UserController@datatables')->name('user.datatables');
+	
+	Route::prefix('/category')->name('category.')->group(function ()
+	{
+		Route::post('/datatables', 'CategoryController@datatables')->name('datatables');
+		Route::post('/select', 'CategoryController@select')->name('select');
+	});
+
+	Route::prefix('/stuff')->name('stuff.')->group(function ()
+	{
+		Route::post('/datatables', 'StuffController@datatables')->name('datatables');
+		Route::post('/select', 'StuffController@select')->name('select');
+		Route::post('/code', 'StuffController@selectCode')->name('select.code');
+	});
+
+	Route::prefix('/stock')->name('stock.')->group(function ()
+	{
+		Route::view('/', 'stock.index')->name('index');
+
+		Route::patch('/store', 'StockController@store')->name('store');
+		
+		Route::post('/datatables', 'StockController@datatables')->name('datatables');
+		
+		Route::delete('/destroy/{id}', 'StockController@destroy')->name('destroy');
+	});
+
+	Route::prefix('/transaction')->name('transaction.')->group(function ()
+	{
+		Route::view('/', 'transaction.index')->name('index');
+		
+		Route::get('/detail/{invoice}', 'TransactionController@detail')->name('detail');
+		Route::get('/print/{invoice}', 'TransactionController@print')->name('print');
+		
+		Route::post('/datatables', 'TransactionController@datatables')->name('datatables');
+		Route::delete('/destroy/{id}', 'TransactionController@destroy')->name('destroy');
+	});
+
+	Route::prefix('/setting')->name('setting.')->middleware('can:isAdmin')->group(function ()
+	{
+		Route::put('/', 'SettingController@update')->name('update');
+		Route::view('/', 'setting')->name('index');
+	});
+
+	Route::resource('/category', 'CategoryController');
+	Route::resource('/stuff', 'StuffController');
+	Route::resource('/user', 'UserController');
+});
+
+Route::namespace('Auth')->group(function ()
+{
+	Route::get('/login', 'LoginController@showLoginForm');
+	Route::post('/login', 'LoginController@login')->name('login');
+	
+	Route::get('/logout', 'LoginController@logout')->name('logout');
+});
