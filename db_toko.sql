@@ -387,7 +387,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`idUser`, `nama`, `alamat`, `telepon`, `username`, `password`, `hakAkses`) VALUES
-('170301', 'Aldi', 'Ciamis', '082121397663', 'aldi', '5cf15fc7e77e85f5d525727358c0ffc9', '1'),
+('170301', 'Admin', 'Ciamis', '082121397663', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1'),
 ('170302', 'Erna Ratnasari', 'Bandung', '0821213977632', 'erna', '035b3c6377652bd7d49b5d2e9a53ef40', '2'),
 ('170303', 'Rindiani', 'Bandung', '082727272', 'ririn', 'b84a4059d1af6c8b50bb7a28290dbd63', '2'),
 ('170304', 'Arya Saputra', 'Tasik', '082181412', 'arya', '5882985c8b1e2dce2763072d56a1d6e5', '3'),
