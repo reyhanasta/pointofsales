@@ -13,39 +13,72 @@ class Payment extends Component
 	public $total;
 	public $money;
 	public $return;
+	public $ppn;
+	public $subtotal;
+	public $user;
+	public $stuffs;
 
-	protected $listeners = ['updateTotal' => 'get'];
+	protected $listeners = [
+		'count-total' => 'count',
+		'open-payment' => 'open'
+	];
 
-	public function __construct()
+	public function open()
 	{
-		$this->get();
+		$this->money = 0;
+		$this->return = 0;
+
+		$this->resetValidation();
+		$this->dispatchBrowserEvent('open-payment');
 	}
 
 	public function store(TransactionService $transactionService)
 	{
-		$this->money = intval(str_replace(',', '', $this->money));
+		$this->money = intval(str_replace([',', '.'], '', $this->money));
 
-		$data = $this->validate([
-			'money' => 'required|integer|min:'.$this->total
+		$this->validate([
+			'money' => 'required|integer|min:'.$this->subtotal
 		]);
 
-		$transaction = $transactionService->storeData($data);
+		$data = [
+			'idUser' => $this->user->idUser,
+			'namaUser' => $this->user->nama,
+			'total' => $this->subtotal,
+			'ppn' => $this->ppn,
+			'total_bayar' => $this->money,
+			'tanggal' => date('Y-m-d H:i:s')
+		];
 
-		return redirect()->route('transaction.detail', $transaction->invoice);
+		$transaction = $transactionService->store($data, $this->stuffs);
+
+		$this->emit('clear-transaction');
+		$this->emit('reset-id');
+		$this->emit('open-print', $transaction->idPenjualan, $this->money, $this->return);
+		$this->dispatchBrowserEvent('close-payment');
+		$this->dispatchBrowserEvent('reset-stuff');
 	}
 
-	public function get()
-	{
-		$transaction = new Transaction;
-		$this->total = $transaction->total();
+	public function count(array $stuffs, int $total)
+	{		
+		$ppn = site('ppn') / 100;
+
+		$this->stuffs = $stuffs;
+		$this->total = $total;
+		$this->ppn = $total * $ppn;
+		$this->subtotal = $this->total + $this->ppn;
 	}
 
 	public function updatedMoney($money)
 	{
-		$this->return = max(intval($money) - $this->total, 0);
+		$this->return = max(intval(str_replace([',', '.'], '', $money)) - $this->subtotal, 0);
 	}
 
-    public function render(Transaction $transaction)
+	public function mount()
+	{
+		$this->user = auth()->user();
+	}
+
+    public function render()
     {
         return view('livewire.transaction.payment');
     }
