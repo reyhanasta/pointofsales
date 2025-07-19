@@ -30,8 +30,8 @@ Aplikasi kasir sederhana berbasis web, dibangun menggunakan **Laravel 8**, **Boo
 ### 1. **Clone repositori ini**
 
 ```bash
-git clone https://github.com/nama-user/nama-repo.git
-cd nama-repo
+git clone https://github.com/reyhanasta/pointofsales.git
+cd pointofsales
 ```
 
 ### 2. **Salin file environment**
@@ -60,11 +60,9 @@ php artisan key:generate
 php artisan storage:link
 ```
 
-### 6. **Jalankan migrasi dan seeder**
+### 6. **Import database manual**
 
-```bash
-php artisan migrate --seed
-```
+Import manual database yang sudah di sediakan, (migrasi menyusul)
 
 ### 7. **Jalankan aplikasi**
 
