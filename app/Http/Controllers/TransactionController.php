@@ -55,8 +55,14 @@ class TransactionController extends Controller
 
 		$bayar = request()->bayar;
 		
-		$pdf = PDF::loadView('transaction.print', compact('transaction', 'bayar', 'logoBase64','logoPath'));
-		$pdf->setPaper(array(0, 0, 211, 700));
+		//small struk
+		// $pdf = PDF::loadView('transaction.print', compact('transaction', 'bayar', 'logoBase64','logoPath'));
+		// $pdf->setPaper(array(0, 0, 211, 700));
+
+		//a4 struk
+		$pdf = PDF::loadView('transaction.print-a4', compact('transaction', 'bayar', 'logoBase64','logoPath'));
+		$pdf->setPaper('a4', 'portrait');
+
 
 		return $pdf->stream();
 	}

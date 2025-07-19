@@ -145,11 +145,11 @@
 			<td width="2%">:</td>
 			<td class="right">{{ number_format($total) }}</td>
 		</tr>
-		<tr>
+		{{-- <tr>
 			<td>PPN</td>
 			<td>:</td>
 			<td class="right">{{ number_format($transaction->ppn) }}</td>
-		</tr>
+		</tr> --}}
 		<tr>
 			<td><strong>Subtotal</strong></td>
 			<td>:</td>
@@ -169,7 +169,7 @@
 
 	<hr>
 
-	<table>
+	{{-- <table>
 		<tr>
 			<td width="50%">BKP</td>
 			<td class="right">{{ number_format($total) }}</td>
@@ -186,7 +186,7 @@
 			<td>PPN</td>
 			<td class="right">{{ number_format($transaction->ppn) }}</td>
 		</tr>
-	</table>
+	</table> --}}
 
 	<div class="footer center uppercase">
 		<p>Terima kasih</p>
